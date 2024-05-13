@@ -1,0 +1,79 @@
+#!/usr/bin/env python3
+
+
+
+import rospy
+from gtec_msgs.msg import Ranging
+from nav_msgs.msg import Odometry
+
+from multilateration import Engine
+from math import sqrt
+
+
+def main():
+    
+    def rangingCallback( msg):
+            if msg.anchorId == 1 : msg_ranging[0] = msg.range
+            if msg.anchorId == 2 : msg_ranging[1] = msg.range
+            if msg.anchorId == 3 : msg_ranging[2] = msg.range
+            if msg.anchorId == 4 : msg_ranging[3] = msg.range
+
+    msg = Odometry()
+
+    #anchor 0,1,2,3
+    msg_ranging = [0,0,0,0]
+    anchor_pos = [[5,0,5],[-5,0,5],[0,5,5],[0,-5,5]]
+
+
+    rospy.init_node('listener', anonymous=True)
+    rospy.Subscriber('/gtec/toa/ranging', Ranging, rangingCallback)
+    # rospy.Subscriber('/gtec/toa/anchors', MarkerArray, anchorsCallback)
+    pub = rospy.Publisher('odom_multi', Odometry, queue_size=1000)
+
+    
+        
+
+    E = Engine(goal=[None, None, None])
+    E.add_anchor('anchore_A',(5,0,5))
+    E.add_anchor('anchore_B',(-5,0,5))
+    E.add_anchor('anchore_C',(0,5,5))
+    E.add_anchor('anchore_D',(0,-5,5))
+    rate = rospy.Rate(30)
+
+    while not rospy.is_shutdown():
+        msg.pose.pose.position.z = 3.0
+        msg.pose.pose.position.x = 1.0
+        msg.pose.pose.position.y = 2.0
+        pub.publish(msg)
+
+
+
+        E.add_measure('anchore_A',5*sqrt(2))
+        E.add_measure('anchore_B',5*sqrt(2))
+        E.add_measure('anchore_C',5*sqrt(2))
+        E.add_measure('anchore_D',5*sqrt(2))
+
+        if msg_ranging[0] != 0:
+            # P.solve()
+            rospy.loginfo(E.solve())
+
+        rate.sleep()
+
+    # def gps_solve(self, distances_to_station, stations_coordinates):
+    #     def error(x, c, r):
+    #         return sum([(np.linalg.norm(x - c[i]) - r[i]) ** 2 for i in range(len(c))])
+
+    #     l = len(stations_coordinates)
+    #     S = sum(distances_to_station)
+    #     # compute weight vector for initial guess
+    #     W = [((l - 1) * S) / (S - w) for w in distances_to_station]
+    #     # get initial guess of point location
+    #     x0 = sum([W[i] * stations_coordinates[i] for i in range(l)])
+    #     # optimize distance from signal origin to border of spheres
+    #     return minimize(error, x0, args=(stations_coordinates, distances_to_station), method='Nelder-Mead').x
+
+if __name__ == '__main__':
+    try:
+        main()
+    except rospy.ROSInterruptException:
+        pass

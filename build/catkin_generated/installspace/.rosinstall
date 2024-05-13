@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /root/uwbvio_ws/install/setup.sh

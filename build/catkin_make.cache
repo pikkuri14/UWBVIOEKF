@@ -1,0 +1,2 @@
+gazebosensorplugins:realsense_ros_gazebo:rosbag_to_csv:rosmsgs:turtlebot3/turtlebot3:turtlebot3/turtlebot3_bringup:turtlebot3/turtlebot3_description:turtlebot3/turtlebot3_example:turtlebot3/turtlebot3_navigation:turtlebot3/turtlebot3_slam:turtlebot3/turtlebot3_teleop:turtlebot3_msgs:turtlebot3_simulations/turtlebot3_fake:turtlebot3_simulations/turtlebot3_gazebo:turtlebot3_simulations/turtlebot3_simulations:uwb
+-DCATKIN_WHITELIST_PACKAGES=rosbag_to_csv -DCATKIN_DEVEL_PREFIX=/root/uwbvio_ws/devel -DCMAKE_INSTALL_PREFIX=/root/uwbvio_ws/install -G Unix Makefiles

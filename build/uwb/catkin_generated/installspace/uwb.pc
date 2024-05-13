@@ -1,0 +1,8 @@
+prefix=/root/uwbvio_ws/install
+
+Name: uwb
+Description: Description of uwb
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
