@@ -1,0 +1,1 @@
+This project is from my final bachelor's project, It is mainly about Simulating sensor fusion using ROS Robot_Localization package with EKF algorithm. The simulated sensor used are 5 UWB Ranging Sensor (4 beacons and a tag) and Realsense T265 for VIO sensor. To localize from ranges to 3D location here using Multilateration method.
